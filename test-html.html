@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chatbot</title>
+</head>
+<body>
+    <div id="chatbox">
+        <div id="chat"></div>
+    </div>
+    <div id="input-container">
+        <input type="text" id="user-input" placeholder="Type a message...">
+        <button id="send-button">Send</button>
+    </div>
+</body>
+</html>
+<script>
+    $(document).ready(function() {
+        $("#send-button").click(function() {
+            var userInput = $("#user-input").val();
+            $.post("/get_response", { user_input: userInput }, function(data) {
+                $("#chat").append("<p><strong>You:</strong> " + userInput + "</p>");
+                $("#chat").append("<p><strong>Bot:</strong> " + data + "</p>");
+                $("#user-input").val(""); // Clear the input field
+            });
+        });
+    });
+</script>
