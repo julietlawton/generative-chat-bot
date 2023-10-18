@@ -235,6 +235,10 @@ tokenizer = GPT2Tokenizer.from_pretrained(model_name)
 tokenized_texts = [tokenizer.encode(conversation, return_tensors="pt") for conversation in movie_conversations["conversation"]]
 
 # %%
+
+batch_size = 4
+learning_rate = 5e-5
+num_epochs = 1
 class ConversationDataset(Dataset):
     def __init__(self, tokenized_texts, tokenizer):
         self.tokenized_texts = tokenized_texts
