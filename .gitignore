@@ -1,2 +1,7 @@
 .DS_Store
 .env/
+gpt2-trainer/
+gpt2-eval/
+trained-model/
+test.ipynb
+another_test.ipynb
