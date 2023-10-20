@@ -44,10 +44,10 @@
 				$('#response #user').css({"color": "black", "width": "90%", "float": "left"}); 
 				$('#prompt').val(''); 
 				$.ajax({ 
-					url: '/', 
-					type: 'POST', 
+					url: "/predict", 
+					type: "POST", 
 					data: {prompt: prompt, temperature: temperature}, 
-					dataType: 'json', 
+					dataType: "json", 
                     success: function(data) {
 						// Get the response
                         let responseText = data.response;

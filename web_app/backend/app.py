@@ -2,11 +2,13 @@ import re
 import torch
 from flask import Flask, render_template, request, jsonify 
 from flask_bootstrap import Bootstrap
+from flask_cors import CORS
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
 from context import ContextWindow
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
+CORS(app)
 
 model = GPT2LMHeadModel.from_pretrained("model/")
 tokenizer = GPT2Tokenizer.from_pretrained("model/")
@@ -84,16 +86,33 @@ def generate(prompt, temperature, max_retries=3):
     return cleaned_response 
 
   
-@app.route("/", methods=["POST", "GET"]) 
-def index(): 
-    if request.method == "POST": 
-        prompt = request.form["prompt"] 
-        temperature_selection = request.form["temperature"]
-        temperature = float(temperature_selection)
-        response = generate(prompt, temperature) 
+# @app.route("/", methods=["POST", "GET"]) 
+# def index(): 
+#     if request.method == "POST": 
+#         prompt = request.form["prompt"] 
+#         temperature_selection = request.form["temperature"]
+#         temperature = float(temperature_selection)
+#         response = generate(prompt, temperature) 
   
-        return jsonify({"response": response}) 
-    return render_template("index.html") 
+#         return jsonify({"response": response}) 
+#     return render_template("index.html") 
+
+# @app.route("/", methods=["GET"]) 
+# def index(): 
+#     return render_template("index.html") 
+
+@app.route("/predict", methods=["POST"])
+def predict(): 
+    print("hit")
+    prompt = request.json["prompt"]
+    temperature_selection = request.json["temperature"]
+    temperature = float(temperature_selection)
+    generated_text = generate(prompt, temperature)
+
+    response = jsonify({"response": generated_text})
+    response.headers.add("Access-Control-Allow-Origin", "http://localhost:8000") 
+
+    return response
   
 if __name__ == "__main__": 
     app.run(debug=True) 

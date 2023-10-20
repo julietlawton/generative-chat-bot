@@ -1,1 +1,2 @@
-web_app/model/pytorch_model.bin filter=lfs diff=lfs merge=lfs -text
+web_app/backend filter=lfs diff=lfs merge=lfs -text
+web_app/backend/model/pytorch_model.bin filter=lfs diff=lfs merge=lfs -text
