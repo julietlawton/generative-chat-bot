@@ -1,4 +1,5 @@
 .DS_Store
+movie_lines/.DS_Store
 .env/
 gpt2-trainer/
 gpt2-eval/
