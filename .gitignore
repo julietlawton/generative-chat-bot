@@ -7,3 +7,5 @@ test.ipynb
 another_test.ipynb
 web_app/__pycache__/
 __pycache__/
+model/
+tmp/

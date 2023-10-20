@@ -1,5 +1,7 @@
 import re
+import os
 import torch
+import boto3
 from flask import Flask, render_template, request, jsonify 
 from flask_bootstrap import Bootstrap
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
@@ -8,8 +10,46 @@ from context import ContextWindow
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
 
-model = GPT2LMHeadModel.from_pretrained("model/")
-tokenizer = GPT2Tokenizer.from_pretrained("model/")
+aws_access_key = os.environ.get("AWS_ACCESS_KEY")
+aws_secret_key = os.environ.get("AWS_SECRET_ACCESS_KEY")
+
+s3 = boto3.client(
+    "s3", 
+    aws_access_key_id=aws_access_key, 
+    aws_secret_access_key=aws_secret_key
+)
+
+# Retrieve the list of existing buckets
+response = s3.list_buckets()
+
+# Output the bucket names
+print("Downloading model")
+
+# Define the bucket and folder path
+bucket_name = "cinebot-model"
+model_folder_path = os.path.join(os.getcwd(), "tmp", bucket_name)
+
+# Ensure local directory exists
+
+if not os.path.exists(model_folder_path):
+    os.makedirs(model_folder_path)
+
+# List all files in the folder
+objects = s3.list_objects_v2(Bucket=bucket_name)
+
+# Download each file
+for obj in objects.get('Contents', []):
+    file_path_in_bucket = obj['Key']
+    
+    # Save the file
+    local_file_path = os.path.join(model_folder_path, os.path.basename(file_path_in_bucket))
+    
+    s3.download_file(bucket_name, file_path_in_bucket, local_file_path)
+
+print("Model download complete.")
+
+model = GPT2LMHeadModel.from_pretrained(model_folder_path)
+tokenizer = GPT2Tokenizer.from_pretrained(model_folder_path)
 generator_max_length = 35
 max_context_tokens = 100
 contextwindow = ContextWindow(max_tokens=max_context_tokens)
