@@ -1,6 +1,6 @@
 # Project Overview
 
-The goal of this project was to build an entertaining and engaging generative chatbot that can carry out multi-turn conversations, adapt to context, and handle a variety of topics. 
+The goal of this project was to build an entertaining and engaging generative chatbot that can carry out multi-turn conversations, adapt to context, and handle a variety of topics. To do this, GPT-2 small was fine tuned on a corpus of movie conversations from the [Cornell Movie Dialog dataset](https://www.cs.cornell.edu/~cristian/Cornell_Movie-Dialogs_Corpus.html). After training the model, chatbot architecture was built on top of it to allow the model to respond to user input and maintain context.
 
 
 ## Running the website locally
